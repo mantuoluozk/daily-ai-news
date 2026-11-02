@@ -1,217 +1,113 @@
 # Daily AI News
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/Platform-Cross--platform-blue.svg)](https://github.com/mantuoluozk/daily-ai-news)
-[![AI Agents](https://img.shields.io/badge/AI%20Agents-Claude%20%7C%20MiMo%20%7C%20Cursor-brightgreen.svg)](https://github.com/mantuoluozk/daily-ai-news)
-
-> 🚀 每日 AI 新闻自动发布：拉取热点 → 选择主题 → 写文章 → 发布到微信公众号
-
-## 问题背景
-
-运营微信公众号的开发者经常会遇到：
-
-- 📰 每天要花时间找 AI 圈热点新闻
-- ✍️ 找到新闻后还要写文章，耗时耗力
-- 🎨 写完文章还要做封面图
-- 📤 最后还要手动发布到公众号
-
-**这个 skill 让你一句话完成从选题到发布的全流程。**
-
-## ✨ 特性
-
-- 🤖 **AI 推荐主题** - 自动分析新闻热度，推荐最佳选题
-- 📰 **热点拉取** - 自动获取 aihot.virxact.com 精选 AI 新闻
-- ✍️ **自动撰文** - 秋芝式风格，口语化，有深度
-- 🖼️ **插图添加** - 自动从网络获取相关插图
-- 🎨 **封面生成** - Chrome headless 自动生成封面图
-- 📤 **一键发布** - 直接发布到微信公众号草稿箱
-
-## 🛠️ 支持的 AI 工具
-
-| 工具 | 支持状态 |
-|------|---------|
-| [MiMo Code](https://github.com/XiaomiMiMo/MiMo-Code) | ✅ 完全支持 |
-| Claude Code | ✅ 完全支持 |
-| [Cursor](https://cursor.sh) | ✅ 完全支持 |
-| OpenCode | ✅ 完全支持 |
-| 其他 AI 编码工具 | ✅ 通用兼容 |
-
-## 📦 前置条件
-
-- ✅ 安装 [aihot](https://aihot.virxact.com) skill（获取新闻数据）
-- ✅ 安装 [baoyu-post-to-wechat](https://github.com/JimLiu/baoyu-skills) skill（发布到公众号）
-- ✅ 配置微信公众号 API 凭证（AppID + AppSecret）
-- ✅ 安装 Chrome 浏览器（用于生成封面图）
-- ✅ 安装 [Bun](https://bun.sh) 运行时
-
-## 🚀 快速开始
-
-### 1. 安装依赖 Skills
+> 一句话从「今天有什么 AI 新闻」到「公众号草稿箱里有一篇成稿」。
+> 这个仓库是**编排层**，渲染和发布交给 [wxpub](https://github.com/mantuoluozk/wxpub)。
 
 ```bash
-# 安装 baoyu-skills（包含 baoyu-post-to-wechat）
-# 参见 https://github.com/JimLiu/baoyu-skills
+pip install git+https://github.com/mantuoluozk/wxpub.git
+wxpub doctor      # 体检：凭证、字体、出口 IP、接口权限
 ```
 
-### 2. 配置微信公众号 API
+> wxpub 还没发到 PyPI，先用 git 装，等价的一条命令。发布后这里会换成 `pip install wxpub`。
 
-在 `~/.baoyu-skills/.env` 中配置：
-
-```
-WECHAT_APP_ID=你的AppID
-WECHAT_APP_SECRET=你的AppSecret
-```
-
-### 3. 安装本 Skill
-
-告诉你的 Agent：
-
-> 请帮我安装 github.com/mantuoluozk/daily-ai-news
-
-或者手动克隆：
-
-```bash
-git clone https://github.com/mantuoluozk/daily-ai-news.git ~/.claude/skills/
-```
-
-### 4. 开始使用
-
-直接对 Agent 说：
-
-> 发一篇 AI 新闻
-
-## 📝 工作流程
-
-```
-用户说"发一篇 AI 新闻"
-    ↓
-Step 1: 拉取 aihot 精选新闻
-    ↓
-Step 2: 展示列表 + AI 推荐主题
-    ↓
-Step 3: 用户选择主题
-    ↓
-Step 4: 获取详细内容 + 写文章（自动添加插图）
-    ↓
-Step 5: 生成封面图
-    ↓
-Step 6: 发布到微信公众号草稿箱
-    ↓
-完成！提示用户去后台确认
-```
-
-## 📁 目录结构
-
-```
-daily-ai-news/
-├── README.md                      # 本文件
-├── SKILL.md                       # 核心指南（AI 代理读取）
-├── LICENSE                        # MIT 许可证
-└── skills/
-    └── daily-ai-news/
-        └── SKILL.md               # Skill 定义
-```
-
-## 🔧 核心功能详解
-
-### 新闻拉取
-
-自动获取 aihot.virxact.com 最近 24 小时的精选 AI 新闻，包含标题、来源、摘要。
-
-### AI 推荐主题
-
-AI 会根据以下标准推荐 1-2 个最佳主题：
-
-| 维度 | 说明 |
-|------|------|
-| 话题性 | 大众关心程度 |
-| 热度 | 来源权重（大厂优先） |
-| 实用性 | 读者能用上 |
-| 新闻价值 | 时效性 |
-
-### 文章风格
-
-- **秋芝式开场**：痛点前置 + 先说结论
-- **口语化**：像跟朋友聊天
-- **结构清晰**：每段 2-3 句，用表格做对比
-- **有深度**：不只是新闻转述，还有解读分析
-- **带插图**：文章中间加 1-2 张网络插图
-
-### 封面生成
-
-使用 Chrome headless 自动生成 1280×544 的封面图，支持自定义 HTML 模板。
-
-## 💡 使用示例
-
-### 示例 1：发一篇 AI 新闻
-
-**用户说**："发一篇 AI 新闻"
-
-**Agent 自动执行：**
-
-```
-拉取新闻中...
-获取到 16 条新闻
-
-今日 AI 新闻精选：
-
-1. ChatGPT 语音大升级：Bidi 1 已上线测试 - IT之家
-2. 豆包专业版上线：能操作你电脑的 AI 办公助手 - 豆包
-3. ...
-
-【推荐】#1 ChatGPT 语音升级 - 大厂动态，话题性强
-
-请选择主题（输入数字）：1
-
-生成文章中...
-生成封面中...
-发布中...
-
-发布完成！
-文章：ChatGPT 语音大升级：能边说边听了
-请去 mp.weixin.qq.com 草稿箱确认发布
-```
-
-### 示例 2：选择豆包新闻
-
-**用户说**："基于豆包这个新闻写一篇吧"
-
-**Agent 自动执行：**
-
-1. 获取豆包专业版详细内容
-2. 写一篇深度解读文章
-3. 自动添加产品截图作为插图
-4. 生成封面图
-5. 发布到公众号
-
-## 🤝 贡献
-
-欢迎贡献！请遵循以下步骤：
-
-1. Fork 本仓库
-2. 创建你的分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交你的更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 创建一个 Pull Request
-
-### 贡献内容
-
-- 🐛 报告 Bug
-- 💡 提出新功能
-- 📝 改进文档
-- 🧪 添加测试用例
-- 🌍 翻译成其他语言
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
-
-## 🙏 致谢
-
-- 感谢 [aihot](https://aihot.virxact.com) 提供 AI 新闻数据
-- 感谢 [baoyu-skills](https://github.com/JimLiu/baoyu-skills) 提供微信公众号发布能力
-- 感谢所有使用这个 skill 的开发者
+装上后对你的 AI 工具说：**发一篇 AI 新闻**。
 
 ---
 
-**遇到问题？** 提交 [Issue](https://github.com/mantuoluozk/daily-ai-news/issues)
+## 它解决什么
+
+每天固定流程：翻新闻 → 挑一条 → 写 → 做封面 → 发。前两件需要判断力，
+后三件是纯机械劳动，而且每一步都有坑（封面被裁、图片是 WebP 传不上去、
+`40164` 白名单、`45166` 正文校验）。
+
+这个 skill 只做前两件。后面全部调 `wxpub` 一条命令完成。
+
+## 前置条件
+
+| 需要 | 说明 |
+|---|---|
+| 一个 AI 编码工具 | Claude Code / Cursor / MiMo / WorkBuddy 都行 |
+| 装 wxpub | `pip install git+https://github.com/mantuoluozk/wxpub.git`，装完跑 `wxpub doctor` |
+| 公众号 AppID + AppSecret | 存在 `~/.wxpub/.env` 或环境变量里 |
+
+**就这三行。** 不需要 Chrome，不需要 Bun，不需要另外装发布 skill ——
+v1 版本要装 5 个东西，90% 的人在那一步就关页面了。这是 v2 最重要的改动。
+
+`wxpub doctor` 会一次性检查：凭证是否有效、草稿箱接口有没有权限、
+当前出口 IP 是多少、中文字体能不能找到。缺什么、去哪补，它直接告诉你。
+
+## 工作流程
+
+```
+"发一篇 AI 新闻"
+    ↓
+① 拉 aihot 精选新闻（webfetch，不装额外 skill）
+    ↓
+② 列出来 + 推荐 1-2 条，等你选
+    ↓
+③ 取原文详情
+    ↓
+④ 写文章（带 frontmatter，wxpub 靠它取标题和摘要）
+    ↓
+⑤ wxpub cover      → 封面，Pillow 直画
+    ↓
+⑥ wxpub publish --dry-run → 你先看成品
+    ↓
+⑦ wxpub publish    → 进草稿箱
+```
+
+## 安装
+
+```bash
+git clone https://github.com/mantuoluozk/daily-ai-news.git ~/.claude/skills/daily-ai-news
+```
+
+或者直接让 Agent 装：
+
+> 帮我安装 github.com/mantuoluozk/daily-ai-news
+
+## 目录结构
+
+```
+daily-ai-news/
+├── README.md      # 本文件
+├── SKILL.md       # 核心指南，Agent 读这个
+└── LICENSE
+```
+
+产物长这样：
+
+```
+articles/ai-daily-2026-11-02-chatgpt-voice/
+├── article.md     # 正文 + frontmatter
+├── cover.png      # 1280×544
+└── out/
+    ├── preview.html   # 手机宽度预览
+    └── article.html   # 可直接粘进后台的成品
+```
+
+## 为什么封面是 Pillow 画的
+
+v1 用 Chrome headless 截 HTML。问题是要装浏览器、字体加载时序不稳、
+Windows 下的文件路径转义反复出错，而且截一张要 2 秒。
+
+另一条路是 AI 生图。问题是外文模型对中文字形的建模一直不可靠，
+标题超过四五个汉字基本必错 —— 缺笔画、错位、像甲骨文。这不是换提示词能解决的。
+
+现在封面由 `wxpub cover` 用 Pillow 直接画：深色底、双径向光晕、居中标题，
+11 个主题 × 6 种布局。中文字 100% 可控，改一个字重跑 0.1 秒，零浏览器依赖。
+
+## 常见故障
+
+| 现象 | 原因 | 处理 |
+|---|---|---|
+| `40164 invalid ip` | 出口 IP 不在白名单 | `wxpub doctor` 打印当前 IP，去后台加上 |
+| 加了白名单还报 | 白名单有缓存延迟 | 等 1-5 分钟 |
+| `45166` | 正文里有 `<a>` 标签 | wxpub 提交前清洗，别自己拼 HTML |
+| `48001` | 个人未认证号没有草稿箱权限 | 需要认证，代码解决不了 |
+
+完整 21 条在 [wxpub 的 PITFALLS.md](https://github.com/mantuoluozk/wxpub/blob/main/PITFALLS.md)。
+
+## License
+
+MIT
