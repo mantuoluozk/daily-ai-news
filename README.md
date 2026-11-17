@@ -1,5 +1,9 @@
 # Daily AI News
 
+## 已迁移
+
+AI 新闻选题、公众号写作和草稿推送已合并到 [wxpub 的公众号写作 Skill](https://github.com/mantuoluozk/wxpub/tree/main/skills/wechat-writing)。请在 wxpub 安装和更新。这个仓库保留旧版说明和提交历史。
+
 > 一句话从「今天有什么 AI 新闻」到「公众号草稿箱里有一篇成稿」。
 > 这个仓库是**编排层**，渲染和发布交给 [wxpub](https://github.com/mantuoluozk/wxpub)。
 
